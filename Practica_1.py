@@ -41,6 +41,8 @@ while attempts > 0:
     
     if letter in guessed:
         print("Ya usaste esa letra.")
+    elif letter.lower() < 'a' or letter.lower() > 'z' or len(letter) > 1:
+        print('Entrada no válida')
     elif letter in word:
         guessed.append(letter)
         print("¡Bien! Esa letra está en la palabra.")
