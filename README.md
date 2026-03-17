@@ -1,2 +1,3 @@
 # TallerDeLenguajes
-Repositorio para las prácticas de Taller de Lenguajes
+Juan Ignacio Ron
+18939/6
