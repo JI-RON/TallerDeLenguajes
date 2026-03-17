@@ -1,17 +1,11 @@
 import random
 
-words = [
-    "python",
-    "programa",
-    "variable",
-    "funcion",
-    "bucle",
-    "cadena",
-    "entero",
-    "lista",
-    ]
-
-word = random.choice(words)
+words = {
+    "Programación" : ["python","programa","variable","funcion","bucle","cadena","entero","lista"],
+    "Comida" : ["banana", "manzana", "hamburguesa", "milanesa", "pure", "helado", "chocolate", "medialuna"],
+    "Deportes" : ["futbol", "pelota", "offside", "rugby", "basket", "referi", "jugador", "reglamento"],
+    "Entretenimiento" : ["netflix", "friends", "seinfeld", "pelicula", "miniserie", "comedia", "streaming", "videojuego"]
+}
 
 guessed = []
 
@@ -20,6 +14,19 @@ score = 0
 
 print("¡Bienvenido al Ahorcado!")
 print()
+print("Seleccione una de las siguientes categorías")
+print("Programación")
+print("Comida")
+print("Deportes")
+print("Entretenimiento")
+categoria = input("Su elección:")
+
+while categoria not in words.keys():
+    print('Categoría incorrecta. Ingrese de nuevo.')
+    categoria = input("Su elección:")
+
+word = random.choice(words[categoria])
+
 while attempts > 0:
     # Mostrar progreso: letras adivinadas y guiones para las que faltan
     progress = ""
@@ -59,5 +66,5 @@ while attempts > 0:
 else:
     print(f"¡Perdiste! La palabra era: {word}")
     score = 0
-
+    
 print(f"Score final: {score}")
