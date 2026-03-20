@@ -26,8 +26,9 @@ while sigue_jugando == "y":
     print("Entretenimiento")
     categoria = input("Su elección:").lower()
 
-    while categoria not in words.keys():
-        print('Categoría incorrecta. Ingrese de nuevo.')
+    while categoria not in words.keys() or len(words[categoria]) == 0:
+        print('Categoría incorrecta/Categoría sin palabras disponibles.')
+        print('Ingrese de nuevo.')
         categoria = input("Su elección:")
 
     word = random.sample(words[categoria],1)[0]
