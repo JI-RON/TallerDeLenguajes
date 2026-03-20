@@ -1,11 +1,14 @@
 import random
 
 words = {
-        "Programación" : ["python","programa","variable","funcion","bucle","cadena","entero","lista"],
-        "Comida" : ["banana", "manzana", "hamburguesa", "milanesa", "pure", "helado", "chocolate", "medialuna"],
-        "Deportes" : ["futbol", "pelota", "offside", "rugby", "basket", "referi", "jugador", "reglamento"],
-        "Entretenimiento" : ["netflix", "friends", "seinfeld", "pelicula", "miniserie", "comedia", "streaming", "videojuego"]
+        "programación" : ["python","programa","variable","funcion","bucle","cadena","entero","lista"],
+        "comida" : ["banana", "manzana", "hamburguesa", "milanesa", "pure", "helado", "chocolate", "medialuna"],
+        "deportes" : ["futbol", "pelota", "offside", "rugby", "basket", "referi", "jugador", "reglamento"],
+        "entretenimiento" : ["netflix", "friends", "seinfeld", "pelicula", "miniserie", "comedia", "streaming", "videojuego"]
     }
+
+print("¡Bienvenido al Ahorcado!")
+print()
 
 sigue_jugando = "y"
 while sigue_jugando == "y":
@@ -15,14 +18,12 @@ while sigue_jugando == "y":
     attempts = 6
     score = 0
 
-    print("¡Bienvenido al Ahorcado!")
-    print()
     print("Seleccione una de las siguientes categorías")
     print("Programación")
     print("Comida")
     print("Deportes")
     print("Entretenimiento")
-    categoria = input("Su elección:")
+    categoria = input("Su elección:").lower()
 
     while categoria not in words.keys():
         print('Categoría incorrecta. Ingrese de nuevo.')
@@ -74,4 +75,7 @@ while sigue_jugando == "y":
     print(f"Score final: {score}")
     
     sigue_jugando = input('Desea seguir jugando? (y/n)').lower()
+    while sigue_jugando not in ["y", "n"]:
+        print('Entrada no válida. Ingrese "y" para sí o "n" para no.')
+        sigue_jugando = input('Desea seguir jugando? (y/n)').lower()
     print()
