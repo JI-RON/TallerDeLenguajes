@@ -10,13 +10,14 @@ words = {
 print("¡Bienvenido al Ahorcado!")
 print()
 
+score = 0
+
 sigue_jugando = "y"
 while sigue_jugando == "y":
     
     guessed = []
 
     attempts = 6
-    score = 0
 
     print("Seleccione una de las siguientes categorías")
     print("Programación")
@@ -63,14 +64,18 @@ while sigue_jugando == "y":
         else:
             guessed.append(letter)
             attempts -= 1
-            score -= 1
+            if score > 0:
+                score -= 1
             print("Esa letra no está en la palabra.")
 
         print()
 
     else:
         print(f"¡Perdiste! La palabra era: {word}")
-        score = 0
+        if score > 6:
+            score -= 6
+        else:
+            score = 0
 
     print(f"Score final: {score}")
     
