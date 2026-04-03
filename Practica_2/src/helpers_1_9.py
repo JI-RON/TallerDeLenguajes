@@ -1,24 +1,25 @@
 import random
 
-def ejercicio_1(text):
+def ejercicio_1_contador(text):
     """
-    Esta función recibe un texto y cuenta la cantidad de líneas, la cantidad de palabras y el promedio de palabras por línea.
-    Además, imprime aquellas líneas que tienen una cantidad de palabras por encima del promedio.
+    Esta función recibe un texto y devuelve la cantidad de líneas, la cantidad de palabras y el promedio de palabras por línea.
     """
 
     cantidad_lineas = text.count(".") + text.count('!')
+    
 
     edited_text = text.replace('\n', ' ')
     edited_text = edited_text.split()
     cantidad_palabras = len(edited_text)
-
     palabras_por_linea = round(cantidad_palabras/cantidad_lineas,2)
 
-    print(f'Cantidad de lineas: {cantidad_lineas}')
-    print(f'Cantidad de palabras: {cantidad_palabras}')
-    print(f'Promedio de palabras por linea: {palabras_por_linea}')
-    print()
+    return cantidad_lineas, cantidad_palabras, palabras_por_linea
 
+
+def ejercicio_1_encima_promedio(text,palabras_por_linea):
+    """ 
+    Esta función recibe un texto y una cantidad promedio de palabras por línea y devuelve un detalle con la cantidad de líneas por encima del promedio y las lista.
+    """
     lineas = text.split('\n')
     print(f'Líneas por encima del promedio ({palabras_por_linea} palabras):')
     for linea in lineas:
@@ -30,8 +31,8 @@ def ejercicio_1(text):
 
 def ejercicio_2(playlist):
     """
-    Esta función recibe un diccionario de pares canción-duración, donde la duración esta expresada como 'mm:ss'.
-    A partir de los datos, la función calcula la duración total de la playlist, y devuelve los datos de la canción más corta y la canción más larga.
+    Esta función recibe un diccionario de pares canción-duración, donde la duración esta expresada como un string 'mm:ss'.
+    A partir de los datos, la función devuelve la duración total de la playlist en minutos y segundos, y devuelve los datos de la canción más corta y la canción más larga.
     """
     
     duracion_maxima = -9999
@@ -55,14 +56,14 @@ def ejercicio_2(playlist):
     duracion_total_minutos = duracion_total_segundos // 60
     duracion_total_segundos_final = duracion_total_segundos % 60
 
-    print(f'Duración total: {duracion_total_minutos}m {duracion_total_segundos_final}s')
-    print(f'Canción más larga: "{playlist[linea_max]["title"]}", ({playlist[linea_max]["duration"]})')
-    print(f'Canción más corta: "{playlist[linea_min]["title"]}", ({playlist[linea_min]["duration"]})')
+    duracion_total = f'Duración total: {duracion_total_minutos}m {duracion_total_segundos_final}s'
+
+    return duracion_total, linea_max, linea_min
 
 
 def ejercicio_3(review):
     """
-    Esta función recibe como entrada la review de una película. Se le solicita al usuario que ingrese una lista de palabras clave separadas por coma. La función devuelve la review con las palabras clave (spoilers) reemplazando cada letra de cada palabra clave por '*'.
+    Esta función recibe como entrada la review de una película. Se le solicita al usuario que ingrese una lista de palabras clave separadas por coma. La función devuelve la review con reemplazando cada letra de cada palabra clave por '*'.
     """
     
     palabras_spoiler = input("Ingrese las palabras spoiler (separadas por coma):")
@@ -104,19 +105,18 @@ def ejercicio_4():
     cond_4 = False
     cond_5 = False
 
-    while not cond_1 and not cond_2 and not cond_3 and not cond_4 and not cond_5:
-        if mail[0] in ["@", "."] or mail[-1] in ["@", "."]:
-            cond_4 = True
-        entrada = mail.split("@")
-        if len(entrada) != 2:
-            cond_1 = True
-        elif len(entrada[0]) == 0:
-            cond_2 = True
-        elif len(entrada[1].split(".")) == 1:
-            cond_3 = True
-        elif len(entrada[1].split(".")[-1]) < 2:
-            cond_5 = True
-        break
+    if mail[0] in ["@", "."] or mail[-1] in ["@", "."]:
+        cond_4 = True
+    entrada = mail.split("@")
+    if len(entrada) != 2:
+        cond_1 = True
+    elif len(entrada[0]) == 0:
+        cond_2 = True
+    elif len(entrada[1].split(".")) == 1:
+        cond_3 = True
+    elif len(entrada[1].split(".")[-1]) < 2:
+        cond_5 = True
+
     if cond_1 or cond_2 or cond_3 or cond_4 or cond_5:
         return print('El mail no es válido.')
     else:
@@ -147,12 +147,12 @@ def ejercicio_5():
         print('Zona no válida. Las zonas disponibles son: local, regional, nacional.')
         parametro_2 = input('Ingrese la zona:').lower()
 
-    return(f'El precio a pagar por el paquete es: ${costo[parametro_2][parametro_1]}')
+    return f'El precio a pagar por el paquete es: ${costo[parametro_2][parametro_1]}'
 
 
 def ejercicio_6(posts):
     """ 
-    La función recibe una lista de posts en redes sociales y extrae la cantidad de hashtags que contiene. Con los datos recopilados genera una tabla en orden descendente por cantidad de apariciones, para aquellos hashtags que cuentan con más de una aparición. Además, imprime la cantidad de hashtags únicos identificados. 
+    La función recibe una lista de posts en redes sociales y extrae la cantidad de hashtags que contiene. Con los datos recopilados genera una ranking en orden descendente por cantidad de apariciones. 
     """
     hashtags = []
 
@@ -170,16 +170,8 @@ def ejercicio_6(posts):
         else:
             conteo[elemento] += 1
 
-    ranking_claves = sorted(conteo, key=conteo.get, reverse=True)
-    ranking_valores = sorted(conteo.values(), reverse=True)
-
-    print('Hashtags trending (más de una aparición):')
-    for item in range(len(ranking_claves)):
-        if ranking_valores[item] > 1:
-            print('  ',ranking_claves[item],':',ranking_valores[item])
-
-    print()
-    print('Total de hashtags únicos:',len(ranking_claves))
+    ranking = sorted(conteo.items(), key = lambda x: x[1], reverse = True)
+    return ranking
 
 
 def ejercicio_7_menos_de_tres(lista_de_participantes):
