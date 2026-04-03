@@ -202,11 +202,14 @@ def ejercicio_7_sortea_pares(lista_de_participantes):
     FUNCIÓN A UTILIZARSE DENTRO DEL CONTEXTO DEL EJERCICIO #7
     Esta funcion recibe una lista de participantes con tres miembros o más y sin nombres repetidos, y sortea los pares origen-destino de cada regalo.    
     """
+    da_regalo = []
     recibe_regalo = lista_de_participantes.copy()
     for participante in lista_de_participantes:
         participante_1 = participante
+        da_regalo.append(participante_1)
+
         participante_2 = random.choice(recibe_regalo)
-        while participante_1 == participante_2:
+        while (len(recibe_regalo) == 2 and participante_1 in recibe_regalo) or participante_1 == participante_2:
             participante_2 = random.choice(recibe_regalo)
         recibe_regalo.remove(participante_2) 
         print('    ',participante_1,' → ',participante_2)
@@ -226,7 +229,7 @@ def ejercicio_7():
         participantes = lista.split(', ')
         
     print('Sorteo de amigo invisible:')
-    ejercicio_7_sortea_pares(participantes)
+    return ejercicio_7_sortea_pares(participantes)
 
 
 def ejercicio_8():
@@ -246,8 +249,7 @@ def ejercicio_8():
         else:
             mensaje_cifrado += caracter
 
-    print(f'Mensaje cifrado: {mensaje_cifrado}')
-    print(f'Mensaje descifrado: {mensaje}')
+    return mensaje, mensaje_cifrado
 
 
 def ejercicio_9_limpiar_lista(lista_estudiantes):
@@ -322,4 +324,4 @@ def ejercicio_9(lista):
     lista_ordenada = ejercicio_9_ordenar_lista_por_nombre_nota(lista_limpia)
     lista_sin_duplicados = ejercicio_9_eliminar_duplicados(lista_ordenada)
     lista_sin_duplicados_ordenada = ejercicio_9_ordenar_lista_por_nombre(lista_sin_duplicados)
-    ejercicio_9_imprimir_lista(lista_sin_duplicados_ordenada)
+    return ejercicio_9_imprimir_lista(lista_sin_duplicados_ordenada)
