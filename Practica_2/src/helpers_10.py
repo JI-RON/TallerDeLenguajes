@@ -10,17 +10,13 @@ def agregar_participante(tabla_posiciones, participante):
             'Mejor ronda' : 0,
             'Promedio' : 0,
         }
-    return tabla_posiciones
 
 
 def obtener_puntaje_individual(puntajes_individuales):
     """ 
     La función recibe un diccionario que representa una serie de puntajes otorgados por los jueces y devuelve la suma de esos puntajes correspondientes a un participante.
     """
-    puntaje_total = 0
-    for item in puntajes_individuales.keys():
-        puntaje_total += puntajes_individuales[item]
-    return puntaje_total
+    return sum(puntajes_individuales.values())
 
 
 def actualizar_ganador(participante,puntaje,ganador_nombre,ganador_puntos):
@@ -48,23 +44,23 @@ def actualizar_puntaje_mejor_ronda_promedio(tabla_posiciones, ronda, ronda_numer
     """
     ganador_puntos = -9999
     ganador_nombre = ''   
-    for item in ronda['scores']:
+    for participante in ronda['scores']:
         ### Agrega el participante al diccionario, si no existe
-        tabla_posiciones = agregar_participante(tabla_posiciones,item)
+        agregar_participante(tabla_posiciones,participante)
         
         ### Calcula el puntaje obtenido en la ronda y lo agrega a la tabla
-        puntaje_individual = obtener_puntaje_individual(ronda['scores'][item])
-        tabla_posiciones[item]['Puntaje'] += puntaje_individual
+        puntaje_individual = obtener_puntaje_individual(ronda['scores'][participante])
+        tabla_posiciones[participante]['Puntaje'] += puntaje_individual
 
         ### Actualiza quién es el ganador de la ronda
-        ganador_nombre, ganador_puntos = actualizar_ganador(item,puntaje_individual,ganador_nombre,ganador_puntos)
+        ganador_nombre, ganador_puntos = actualizar_ganador(participante,puntaje_individual,ganador_nombre,ganador_puntos)
         
         ### Actualiza el puntaje de la mejor ronda        
-        if tabla_posiciones[item]['Mejor ronda'] < puntaje_individual:
-            tabla_posiciones[item]['Mejor ronda'] = puntaje_individual
+        if tabla_posiciones[participante]['Mejor ronda'] < puntaje_individual:
+            tabla_posiciones[participante]['Mejor ronda'] = puntaje_individual
 
         ### Actualiza el puntaje promedio
-        tabla_posiciones[item]['Promedio'] = tabla_posiciones[item]['Puntaje'] / ronda_numero
+        tabla_posiciones[participante]['Promedio'] = tabla_posiciones[participante]['Puntaje'] / ronda_numero
     return tabla_posiciones, ganador_nombre, ganador_puntos
 
 
@@ -72,9 +68,7 @@ def actualizar_rondas_ganadas(tabla_posiciones,ganador_nombre):
     """ 
     La función recibe un diccionario que representa la tabla de posiciones y el nombre del ganador de la ronda. Con estos datos, incrementa en 1 la cantidad de rondas ganadas para el participante ganador. 
     """
-    for item in tabla_posiciones:
-        if item == ganador_nombre:
-            tabla_posiciones[item]['Rondas ganadas'] += 1
+    tabla_posiciones[ganador_nombre]['Rondas ganadas'] += 1
 
 
 def actualizar_tabla(tabla_posiciones, ronda, ronda_numero):
@@ -97,7 +91,7 @@ def imprimir_tabla(tabla_posiciones, ronda_numero):
     print(f"{'Cocinero':<10} {'Puntaje':<8} {'Rondas ganadas':<15} {'Mejor ronda':<15} {'Promedio':<10}")
     print("-" * 65)
     for item in sorted(tabla_posiciones, key=lambda x: tabla_posiciones[x]['Puntaje'], reverse=True):
-        print(f"{item:<10} {tabla_posiciones[item]['Puntaje']:<8} {tabla_posiciones[item]['Rondas ganadas']:<15} {tabla_posiciones[item]['Mejor ronda']:<15} {tabla_posiciones[item]['Promedio']:<10.2f}")
+        print(f"{item:<10} {tabla_posiciones[item]['Puntaje']:<8} {tabla_posiciones[item]['Rondas ganadas']:<15} {tabla_posiciones[item]['Mejor ronda']:<15} {tabla_posiciones[item]['Promedio']:<10.1f}")
     print()
 
 
@@ -109,6 +103,6 @@ def procesar_datos(datos):
     for i, ronda in enumerate(datos):
         ronda_numero = i+1
         tabla,ganador,puntos  = actualizar_tabla(tabla, ronda, ronda_numero)
-        print(f'Ronda {ronda_numero} - {ronda['theme']}')
-        print(f'  Ganador: {ganador} ({puntos}pts)')
+        print(f"Ronda {ronda_numero} - {ronda['theme']}")
+        print(f"  Ganador: {ganador} ({puntos}pts)")
         imprimir_tabla(tabla,ronda_numero)
