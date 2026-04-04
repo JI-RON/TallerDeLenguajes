@@ -29,7 +29,7 @@ def actualizar_ganador(participante,puntaje,ganador_nombre,ganador_puntos):
     return ganador_nombre,ganador_puntos
 
 
-def actualizar_puntaje_mejor_ronda_promedio(tabla_posiciones, ronda, ronda_numero):
+def procesar_ronda(tabla_posiciones, ronda, ronda_numero):
     """ 
     La función recibe un diccionario que representa una tabla de posiciones, un diccionario que representa una ronda del juego, con su título y los resultados de cada participante, y además, el número de la ronda a jugarse.
     Se recorren los resultados de la ronda de cada jugador y:
@@ -39,6 +39,7 @@ def actualizar_puntaje_mejor_ronda_promedio(tabla_posiciones, ronda, ronda_numer
     -Se actualiza quien es el ganador de la ronda.
     -Se actualiza el puntaje de la mejor ronda obtenido por el participante.
     -Se actualiza el puntaje promedio del participante.
+    -Se actualizan las rondas ganadas por el participante.
 
     La función devuelve la tabla de posiciones actualizada, el nombre del ganador y los puntos que obtuvo.
     """
@@ -61,24 +62,11 @@ def actualizar_puntaje_mejor_ronda_promedio(tabla_posiciones, ronda, ronda_numer
 
         ### Actualiza el puntaje promedio
         tabla_posiciones[participante]['Promedio'] = tabla_posiciones[participante]['Puntaje'] / ronda_numero
-    return tabla_posiciones, ganador_nombre, ganador_puntos
-
-
-def actualizar_rondas_ganadas(tabla_posiciones,ganador_nombre):
-    """ 
-    La función recibe un diccionario que representa la tabla de posiciones y el nombre del ganador de la ronda. Con estos datos, incrementa en 1 la cantidad de rondas ganadas para el participante ganador. 
-    """
+    
+    ### Actualiza la cantidad de rondas ganadas para el participante ganador
     tabla_posiciones[ganador_nombre]['Rondas ganadas'] += 1
-
-
-def actualizar_tabla(tabla_posiciones, ronda, ronda_numero):
-    """ 
-    La función recibe un diccionario que representa la tabla de posiciones, un diccionario que representa la información de la ronda y el número de la misma. Utiliza las funciones de actualizar_puntaje_mejor_ronda_promedio y actualizar_rondas_ganadas para procesar la información, y devuelve la tabla de posiciones actualizada, el nombre del ganador y su puntaje.
-    """
-    tabla_posiciones, ganador_nombre, ganador_puntos = actualizar_puntaje_mejor_ronda_promedio(tabla_posiciones, ronda, ronda_numero)
-    actualizar_rondas_ganadas(tabla_posiciones,ganador_nombre)
     return tabla_posiciones, ganador_nombre, ganador_puntos
-        
+
 
 def imprimir_tabla(tabla_posiciones, ronda_numero):
     """ 
@@ -89,7 +77,7 @@ def imprimir_tabla(tabla_posiciones, ronda_numero):
     else:
         print('Tabla de posiciones:')
     print(f"{'Cocinero':<10} {'Puntaje':<8} {'Rondas ganadas':<15} {'Mejor ronda':<15} {'Promedio':<10}")
-    print("-" * 65)
+    print("-" * 60)
     for item in sorted(tabla_posiciones, key=lambda x: tabla_posiciones[x]['Puntaje'], reverse=True):
         print(f"{item:<10} {tabla_posiciones[item]['Puntaje']:<8} {tabla_posiciones[item]['Rondas ganadas']:<15} {tabla_posiciones[item]['Mejor ronda']:<15} {tabla_posiciones[item]['Promedio']:<10.1f}")
     print()
@@ -102,7 +90,7 @@ def procesar_datos(datos):
     tabla = {}
     for i, ronda in enumerate(datos):
         ronda_numero = i+1
-        tabla,ganador,puntos  = actualizar_tabla(tabla, ronda, ronda_numero)
+        tabla,ganador,puntos  = procesar_ronda(tabla, ronda, ronda_numero)
         print(f"Ronda {ronda_numero} - {ronda['theme']}")
         print(f"  Ganador: {ganador} ({puntos}pts)")
         imprimir_tabla(tabla,ronda_numero)
