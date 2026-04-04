@@ -202,17 +202,25 @@ def ejercicio_7_sortea_pares(lista_de_participantes):
     FUNCIÓN A UTILIZARSE DENTRO DEL CONTEXTO DEL EJERCICIO #7
     Esta funcion recibe una lista de participantes con tres miembros o más y sin nombres repetidos, y sortea los pares origen-destino de cada regalo.    
     """
-    da_regalo = []
+    sorteo = {}
+
     recibe_regalo = lista_de_participantes.copy()
     for participante in lista_de_participantes:
-        participante_1 = participante
-        da_regalo.append(participante_1)
-
-        participante_2 = random.choice(recibe_regalo)
-        while (len(recibe_regalo) == 2 and participante_1 in recibe_regalo) or participante_1 == participante_2:
-            participante_2 = random.choice(recibe_regalo)
-        recibe_regalo.remove(participante_2) 
-        print('    ',participante_1,' → ',participante_2)
+        # Se maneja el caso limite en que el último participante a asignar es el mismo que queda por recibir regalo
+        if len(recibe_regalo) == 1 and participante == recibe_regalo[0]:
+            candidatos = [p for participante in sorteo if sorteo[p] != participante]
+            intercambia_con = random.choice(candidatos)
+            intercambio = sorteo[intercambia_con]
+            sorteo[intercambia_con] = participante
+            sorteo[participante] = intercambio
+        else:
+            recibe = random.choice(recibe_regalo)
+            while participante == recibe:
+                recibe = random.choice(recibe_regalo)
+            sorteo[participante] = recibe
+            print(' → Destinatario: ',recibe)
+            recibe_regalo.remove(recibe)
+    return sorteo
 
 
 def ejercicio_7():
