@@ -5,9 +5,8 @@ def ejercicio_1_contador(text):
     Esta función recibe un texto y devuelve la cantidad de líneas, la cantidad de palabras y el promedio de palabras por línea.
     """
 
-    cantidad_lineas = text.count(".") + text.count('!')
+    cantidad_lineas = len(text.split('\n'))
     
-
     edited_text = text.replace('\n', ' ')
     edited_text = edited_text.split()
     cantidad_palabras = len(edited_text)
@@ -23,7 +22,7 @@ def ejercicio_1_encima_promedio(text,palabras_por_linea):
     lineas = text.split('\n')
     print(f'Líneas por encima del promedio ({palabras_por_linea} palabras):')
     for linea in lineas:
-        palabras_en_linea = linea.split(" ")
+        palabras_en_linea = linea.split()
         palabras = len(palabras_en_linea)
         if len(palabras_en_linea) > palabras_por_linea:
             print("-",linea,f"({palabras} palabras)")
@@ -67,10 +66,10 @@ def ejercicio_3(review):
     """
     
     palabras_spoiler = input("Ingrese las palabras spoiler (separadas por coma):")
-    palabras_spoiler = palabras_spoiler.replace(',','').split()
-    palabras_spoiler = [x.lower() for x in palabras_spoiler]
+    palabras_spoiler = palabras_spoiler.replace(',','').lower().split()
+
     
-    palabras_review = review.replace('\n', ' ').split(' ')
+    palabras_review = review.replace('\n', ' ').split()
     
     resultado = []
 
@@ -99,25 +98,25 @@ def ejercicio_4():
     """
 
     mail = input('Ingrese un email:')
-    cond_1 = False
-    cond_2 = False
-    cond_3 = False
-    cond_4 = False
-    cond_5 = False
+    condicion_invalida = False
 
-    if mail[0] in ["@", "."] or mail[-1] in ["@", "."]:
-        cond_4 = True
-    entrada = mail.split("@")
-    if len(entrada) != 2:
-        cond_1 = True
-    elif len(entrada[0]) == 0:
-        cond_2 = True
-    elif len(entrada[1].split(".")) == 1:
-        cond_3 = True
-    elif len(entrada[1].split(".")[-1]) < 2:
-        cond_5 = True
+    while not condicion_invalida:
+        if len(mail) == 0:
+            condicion_invalida = True
+            break
+        if mail[0] in ["@", "."] or mail[-1] in ["@", "."] or len(mail) == 0:
+            condicion_invalida = True
+        entrada = mail.split("@")
+        if len(entrada) != 2:
+            condicion_invalida = True
+        elif len(entrada[0]) == 0:
+            condicion_invalida = True
+        elif len(entrada[1].split(".")) == 1:
+            condicion_invalida = True
+        elif len(entrada[1].split(".")[-1]) < 2:
+            condicion_invalida = True
 
-    if cond_1 or cond_2 or cond_3 or cond_4 or cond_5:
+    if condicion_invalida:
         return print('El mail no es válido.')
     else:
         return print('El mail es válido.')
@@ -143,7 +142,7 @@ def ejercicio_5():
         parametro_1 = 2
 
     parametro_2 = input('Ingrese la zona del destino (local/regional/nacional):').lower()
-    while parametro_2 not in list(costo.keys()):
+    while parametro_2 not in costo:
         print('Zona no válida. Las zonas disponibles son: local, regional, nacional.')
         parametro_2 = input('Ingrese la zona:').lower()
 
@@ -179,10 +178,7 @@ def ejercicio_7_menos_de_tres(lista_de_participantes):
     FUNCIÓN A UTILIZARSE DENTRO DEL CONTEXTO DEL EJERCICIO #7
     ESta función recibe una lista de participantes y verifica si cuenta con tres miembros o más.
     """
-    if len(lista_de_participantes) < 3:
-        return True
-    else:
-         return False
+    return len(lista_de_participantes) < 3
 
 
 def ejercicio_7_se_repite(lista_de_participantes):
@@ -190,11 +186,7 @@ def ejercicio_7_se_repite(lista_de_participantes):
     FUNCIÓN A UTILIZARSE DENTRO DEL CONTEXTO DEL EJERCICIO #7
     Esta función recibe una lista de participantes y verifica que no haya al menos un nombre repetido.
     """
-    repetido = False
-    for nombre in lista_de_participantes:
-        if lista_de_participantes.count(nombre) > 1:
-            repetido = True
-    return repetido
+    return len(lista_de_participantes) != len(set(lista_de_participantes))
 
 
 def ejercicio_7_sortea_pares(lista_de_participantes):
@@ -208,7 +200,7 @@ def ejercicio_7_sortea_pares(lista_de_participantes):
     for participante in lista_de_participantes:
         # Se maneja el caso limite en que el último participante a asignar es el mismo que queda por recibir regalo
         if len(recibe_regalo) == 1 and participante == recibe_regalo[0]:
-            candidatos = [p for participante in sorteo if sorteo[p] != participante]
+            candidatos = [x for x in sorteo if sorteo[x] != participante]
             intercambia_con = random.choice(candidatos)
             intercambio = sorteo[intercambia_con]
             sorteo[intercambia_con] = participante
@@ -218,7 +210,6 @@ def ejercicio_7_sortea_pares(lista_de_participantes):
             while participante == recibe:
                 recibe = random.choice(recibe_regalo)
             sorteo[participante] = recibe
-            print(' → Destinatario: ',recibe)
             recibe_regalo.remove(recibe)
     return sorteo
 
@@ -234,7 +225,7 @@ def ejercicio_7():
         print('La cantidad de participantes debe ser como mínimo 3.')
         print('Los nombres no se pueden repetir.')
         lista = input('Ingrese una lista de participantes separados por coma.').lower()
-        participantes = lista.split(', ')
+        participantes = lista.replace(',',' ').split()
         
     print('Sorteo de amigo invisible:')
     return ejercicio_7_sortea_pares(participantes)
@@ -268,8 +259,7 @@ def ejercicio_9_limpiar_lista(lista_estudiantes):
     lista_limpia = []
     
     for item in range(len(lista_estudiantes)):
-        if (lista_estudiantes[item]['name'] != None and lista_estudiantes[item]['' \
-        'name'] != ' ' and not lista_estudiantes[item]['name'].isspace()) and lista_estudiantes[item]['grade'] in ['1','2','3','4','5','6','7','8','9','10']:
+        if (lista_estudiantes[item]['name'] != None and lista_estudiantes[item]['name'] != ' ' and not lista_estudiantes[item]['name'].isspace()) and lista_estudiantes[item]['grade'] in ['1','2','3','4','5','6','7','8','9','10']:
             lista_limpia.append(lista_estudiantes[item])
 
     for item in range(len(lista_limpia)):
@@ -293,13 +283,14 @@ def ejercicio_9_eliminar_duplicados(lista_estudiantes):
     Esta función elimina filas con nombres duplicados de una lista previamente ordenada por grado en orden descendente.
     """
     lista_final = []
-    nombres = []
+    nombres_vistos = set()
 
-    for item in range(len(lista_estudiantes)):
-        if lista_estudiantes[item]['name'] not in nombres:
-            nombres.append(lista_estudiantes[item]['name'])
-            lista_final.append(lista_estudiantes[item])
+    for estudiante in lista_estudiantes:
+        nombre = estudiante['name']
 
+        if nombre not in nombres_vistos:
+            nombres_vistos.add(nombre)
+            lista_final.append(estudiante)
     return lista_final
 
 
